@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MdNotes.WebApi", "MdNotes.WebApi\MdNotes.WebApi.csproj", "{F39B4ECC-DA23-42BA-AAFD-2639BE47F3C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MdNotesServer.Infrastructure", "MdNotesServer.Infrastructure\MdNotesServer.Infrastructure.csproj", "{62A81D02-1A45-41A3-BA43-F74A1FF38042}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F39B4ECC-DA23-42BA-AAFD-2639BE47F3C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F39B4ECC-DA23-42BA-AAFD-2639BE47F3C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F39B4ECC-DA23-42BA-AAFD-2639BE47F3C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62A81D02-1A45-41A3-BA43-F74A1FF38042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62A81D02-1A45-41A3-BA43-F74A1FF38042}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62A81D02-1A45-41A3-BA43-F74A1FF38042}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62A81D02-1A45-41A3-BA43-F74A1FF38042}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

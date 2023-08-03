@@ -1,4 +1,6 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using MdNotesServer.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 namespace MdNotes.WebApi
@@ -14,6 +16,12 @@ namespace MdNotes.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<NotesContext>(options =>
+            {
+                options.UseSqlite();
+            });
+
             services.AddControllers();
             
             services.AddEndpointsApiExplorer();
