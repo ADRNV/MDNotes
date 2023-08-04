@@ -42,7 +42,7 @@ namespace MdNotes.WebApi
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("Notes API", new OpenApiInfo 
+                c.SwaggerDoc("v1", new OpenApiInfo 
                 {
                     Title = "MD NOtes API",
                     Version = "V1",
@@ -76,13 +76,13 @@ namespace MdNotes.WebApi
         {
             app.UseRouting();
 
+            app.UseAuthorization();
+
             app.UseSwagger();
 
             app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(c => c.MapControllers());
         }
