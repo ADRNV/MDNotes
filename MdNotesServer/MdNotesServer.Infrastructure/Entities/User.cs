@@ -1,13 +1,9 @@
-﻿namespace MdNotesServer.Infrastructure.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace MdNotesServer.Infrastructure.Entities
 {
-    public class User
+    public class User : IdentityUser<Guid>
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Loging { get; set; }
-
-        public List<Note> Notes { get; set; }
+        public List<Note>? Notes { get; set; }
     }
 }

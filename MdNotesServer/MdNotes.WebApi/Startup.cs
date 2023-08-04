@@ -1,7 +1,10 @@
 ﻿using MdNotesServer.Infrastructure;
+using MdNotesServer.Infrastructure.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Security.Claims;
 
 namespace MdNotes.WebApi
 {
@@ -22,14 +25,25 @@ namespace MdNotes.WebApi
                 options.UseSqlite();
             });
 
+            services.AddDbContext<UsersContext>(options => options.UseSqlite())
+                .AddDefaultIdentity<User>(options =>
+                {
+                    options.Password.RequiredLength = 8;
+                    options.User.RequireUniqueEmail = true;
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.SignIn.RequireConfirmedEmail = false;
+                })
+                .AddRoles<IdentityRole<Guid>>()
+                .AddEntityFrameworkStores<UsersContext>();
+
             services.AddControllers();
-            
+
             services.AddEndpointsApiExplorer();
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("MD Notes API", new OpenApiInfo 
-                { 
+                c.SwaggerDoc("Notes API", new OpenApiInfo 
+                {
                     Title = "MD NOtes API",
                     Version = "V1",
                     Description = "API for MD Notes"
@@ -44,6 +58,18 @@ namespace MdNotes.WebApi
                 c.IncludeXmlComments(path);
             });
 
+            services.AddAuthorization(c =>
+            {
+                c.AddPolicy("Administrator", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role, "Administrator");
+                });
+
+                c.AddPolicy("User", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role, "User");
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app)
@@ -52,10 +78,7 @@ namespace MdNotes.WebApi
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(options =>
-            {
-                options.DocumentTitle = "MD Notes API";
-            });
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 
