@@ -475,3 +475,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/MdNotesServer/MdNotes.WebApi/bin/Debug/net7.0/MdNotes.WebApi.dll
+/MdNotesServer/MdNotes.WebApi/obj/Debug/net7.0/MdNotes.WebApi.pdb
+/MdNotesServer/MdNotes.WebApi/obj/Debug/net7.0/MdNotes.WebApi.dll
+/MdNotesServer/.vs/MdNotesServer/v17/.suo
+/MdNotesServer/MdNotes.WebApi/bin/Debug/net7.0/MdNotes.WebApi.pdb
