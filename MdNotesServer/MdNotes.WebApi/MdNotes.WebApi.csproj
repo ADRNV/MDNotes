@@ -20,4 +20,8 @@
     <ProjectReference Include="..\MdNotesServer.Infrastructure\MdNotesServer.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>
