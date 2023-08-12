@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
@@ -17,11 +19,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MdNotesServer.Core\MdNotesServer.Core.csproj" />
     <ProjectReference Include="..\MdNotesServer.Infrastructure\MdNotesServer.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Using Include="MdNotesServer.Core.Models.User">
+      <Alias>UserCore</Alias>
+    </Using>
+    <Using Include="MdNotesServer.Infrastructure.Entities.User">
+      <Alias>UserEntity</Alias>
+    </Using>
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using MdNotesServer.Infrastructure;
 using MdNotesServer.Infrastructure.Entities;
+using MdNotesServer.Infrastructure.MappingConfigurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -35,6 +36,18 @@ namespace MdNotes.WebApi
                 })
                 .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<UsersContext>();
+
+            services.AddSingleton<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
+
+            services.AddAutoMapper(c =>
+            {
+                c.AddProfile<UserEntityMappingConfiguration>();
+            }, Assembly.GetExecutingAssembly());
+
+            services.AddMediatR(c =>
+            {
+                c.RegisterServicesFromAssemblies(typeof(Startup).Assembly);
+            });
 
             services.AddControllers();
 
