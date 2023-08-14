@@ -23,10 +23,10 @@ namespace MdNotes.WebApi
 
             services.AddDbContext<NotesContext>(options =>
             {
-                options.UseSqlite();
+                options.UseSqlite($@"{Environment.CurrentDirectory}\notes.db");
             });
 
-            services.AddDbContext<UsersContext>(options => options.UseSqlite())
+            services.AddDbContext<UsersContext>(options => options.UseSqlite($@"{Environment.CurrentDirectory}\users.db"))
                 .AddDefaultIdentity<User>(options =>
                 {
                     options.Password.RequiredLength = 8;
@@ -88,6 +88,11 @@ namespace MdNotes.WebApi
         public void Configure(IApplicationBuilder app)
         {
             app.UseRouting();
+
+            using (var scope =
+                       app.ApplicationServices.CreateScope())
+            using (var context = scope.ServiceProvider.GetService<UsersContext>())
+                context.Database.EnsureCreated();
 
             app.UseAuthorization();
 
