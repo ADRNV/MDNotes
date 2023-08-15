@@ -1,11 +1,15 @@
 ﻿using MdNotesServer.Infrastructure;
 using MdNotesServer.Infrastructure.Entities;
+using MdNotesServer.Infrastructure.Jwt.JwtConfiguration;
 using MdNotesServer.Infrastructure.MappingConfigurations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Security.Claims;
+using System.Text;
 
 namespace MdNotes.WebApi
 {
@@ -23,10 +27,10 @@ namespace MdNotes.WebApi
 
             services.AddDbContext<NotesContext>(options =>
             {
-                options.UseSqlite($@"{Environment.CurrentDirectory}\notes.db");
+                options.UseSqlite($@"Data Source={Environment.CurrentDirectory}\notes.db;");
             });
 
-            services.AddDbContext<UsersContext>(options => options.UseSqlite($@"{Environment.CurrentDirectory}\users.db"))
+            services.AddDbContext<UsersContext>(options => options.UseSqlite($@"Data Source={Environment.CurrentDirectory}\notes.db;"))
                 .AddDefaultIdentity<User>(options =>
                 {
                     options.Password.RequiredLength = 8;
@@ -38,6 +42,30 @@ namespace MdNotes.WebApi
                 .AddEntityFrameworkStores<UsersContext>();
 
             services.AddSingleton<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
+
+            var jwtTokenOptions = _configuration.GetSection("jwtTokenOptions")
+               .Get<JwtTokenOptions>()!;
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+              {
+                  options.RequireHttpsMetadata = true;
+                  options.SaveToken = true;
+                  options.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      ValidateIssuer = true,
+                      ValidIssuer = jwtTokenOptions.Issuer,
+                      ValidateIssuerSigningKey = true,
+                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtTokenOptions.Secret)),
+                      ValidAudience = jwtTokenOptions.Audience,
+                      ValidateAudience = true,
+                      ValidateLifetime = true,
+                      ClockSkew = TimeSpan.FromMinutes(60)
+                  };
+            });
 
             services.AddAutoMapper(c =>
             {
