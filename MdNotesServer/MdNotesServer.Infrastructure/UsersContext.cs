@@ -7,6 +7,8 @@ namespace MdNotesServer.Infrastructure
 {
     public class UsersContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
+        public DbSet<Note> Notes {get; set;}
+
         public UsersContext(DbContextOptions options) : base(options)
         {
             
