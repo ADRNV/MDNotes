@@ -10,15 +10,11 @@ namespace MdNotes.WebApi.Features.User
     {
         private readonly SignInManager<UserEntity> _signInManager;
 
-        private readonly UserManager<UserEntity> _userManager;
-
         private readonly IMapper _mapper;
 
-        public SignInHandler(SignInManager<UserEntity> signInManager, UserManager<UserEntity> userManager, IMapper mapper)
+        public SignInHandler(SignInManager<UserEntity> signInManager, IMapper mapper)
         {
             _signInManager = signInManager;
-
-            _userManager = userManager;
 
             _mapper = mapper;
         }
@@ -28,7 +24,7 @@ namespace MdNotes.WebApi.Features.User
             var user = _mapper.Map<UserCore, UserEntity>(request.User);
 
 
-            if (await _userManager.FindByEmailAsync(user.Email) is not null)
+            if (await _signInManager.UserManager.FindByEmailAsync(user.Email) is not null)
             {
                 var signIn = await _signInManager.PasswordSignInAsync(user, request.User.Password, false, false);
 
