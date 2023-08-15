@@ -29,17 +29,18 @@ namespace MdNotes.WebApi.Features.User
         {
             var user = await _signInManager.UserManager.FindByEmailAsync(request.User.Email);
 
+
             if (user is null)
             {
                 user = _mapper.Map<UserCore, UserEntity>(request.User);
 
                 user.PasswordHash = _passwordHasher.HashPassword(user, request.User.Password);
 
-                await _signInManager.UserManager.CreateAsync(user);
+                var userCreated = await _signInManager.UserManager.CreateAsync(user);
 
-                await _signInManager.SignInAsync(user, true);
+                await _signInManager.SignInAsync(user, false);
 
-                return true;
+                return userCreated.Succeeded;
             }
             else
             {

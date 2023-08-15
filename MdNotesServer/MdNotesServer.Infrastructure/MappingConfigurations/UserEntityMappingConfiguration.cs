@@ -7,7 +7,9 @@ namespace MdNotesServer.Infrastructure.MappingConfigurations
         public UserEntityMappingConfiguration()
         {
             CreateMap<UserEntity, UserCore>()
-                .ForMember(u => u.Name, o => o.MapFrom(u => u.UserName));
+                .ForMember(u => u.Name, o => o.MapFrom(u => u.UserName))
+                .ForMember(u => u.Notes, o => o.Ignore())
+                .ReverseMap();
         }
     }
 }
