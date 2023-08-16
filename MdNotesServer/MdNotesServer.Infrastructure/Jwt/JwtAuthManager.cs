@@ -1,5 +1,4 @@
-﻿using MdNotesServer.Core.Jwt;
-using MdNotesServer.Infrastructure.Entities;
+﻿using MdNotesServer.Infrastructure.Entities;
 using MdNotesServer.Infrastructure.Jwt.JwtConfiguration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +9,7 @@ using System.Text;
 
 namespace MdNotesServer.Infrastructure.Jwt
 {
-    public class JwtAuthManager : IJwtAuthManager
+    public class JwtAuthManager : IJwtAuthManager<UserEntity>
     {
         private readonly JwtTokenOptions _jwtTokenConfig;
         private readonly byte[] _secret;
@@ -28,7 +27,7 @@ namespace MdNotesServer.Infrastructure.Jwt
            (await _usersManager.RemoveAuthenticationTokenAsync(user, "Default", "AccessToken")).Succeeded;
         
 
-        public async Task<JwtAuthResult> GenerateTokens(UserEntity user, Claim[] claims, DateTime now)
+        public async Task<JwtAuthResult> GenerateTokens(UserEntity user, IEnumerable<Claim> claims, DateTime now)
         {
             var shouldAddAudienceClaim = string.IsNullOrWhiteSpace(claims?.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Aud)?.Value);
             var jwtToken = new JwtSecurityToken(

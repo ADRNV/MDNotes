@@ -1,5 +1,6 @@
 ﻿using MdNotesServer.Infrastructure;
 using MdNotesServer.Infrastructure.Entities;
+using MdNotesServer.Infrastructure.Jwt;
 using MdNotesServer.Infrastructure.Jwt.JwtConfiguration;
 using MdNotesServer.Infrastructure.MappingConfigurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -46,6 +47,8 @@ namespace MdNotes.WebApi
             var jwtTokenOptions = _configuration.GetSection("jwtTokenOptions")
                .Get<JwtTokenOptions>()!;
 
+            services.AddSingleton(jwtTokenOptions);
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -71,6 +74,8 @@ namespace MdNotes.WebApi
             {
                 c.AddProfile<UserEntityMappingConfiguration>();
             }, Assembly.GetExecutingAssembly());
+
+            services.AddScoped<IJwtAuthManager<UserEntity>, JwtAuthManager>();
 
             services.AddMediatR(c =>
             {

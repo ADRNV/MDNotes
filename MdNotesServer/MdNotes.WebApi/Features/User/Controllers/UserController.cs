@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using MdNotesServer.Infrastructure.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MdNotes.WebApi.Features.User.Controllers
@@ -15,13 +16,13 @@ namespace MdNotes.WebApi.Features.User.Controllers
         }
 
         [HttpPost("sign-in")]
-        public async Task<bool> SignIn([FromBody]UserCore user)
+        public async Task<JwtAuthResult> SignIn([FromBody]UserCore user)
         {
             return await _mediator.Send(new SignInCommand(user));
         }
 
         [HttpPost("register")]
-        public async Task<bool> Register([FromBody] UserCore user)
+        public async Task<JwtAuthResult> Register([FromBody] UserCore user)
         {
             return await _mediator.Send(new RegisterCommand(user)); 
         }
