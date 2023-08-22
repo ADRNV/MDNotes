@@ -3,6 +3,7 @@ using MdNotesServer.Infrastructure.Entities;
 using MdNotesServer.Infrastructure.Jwt;
 using MdNotesServer.Infrastructure.Jwt.JwtConfiguration;
 using MdNotesServer.Infrastructure.MappingConfigurations;
+using MdNotesServer.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -106,14 +107,14 @@ namespace MdNotes.WebApi
 
             services.AddAuthorization(c =>
             {
-                c.AddPolicy("Administrator", policy =>
+                c.AddPolicy(AuthorizeConstants.Policies.Administrator, policy =>
                 {
-                    policy.RequireClaim(ClaimTypes.Role, "Administrator");
+                    policy.RequireClaim(ClaimTypes.Role, AuthorizeConstants.Roles.Administrator);
                 });
 
-                c.AddPolicy("User", policy =>
+                c.AddPolicy(AuthorizeConstants.Policies.Administrator, policy =>
                 {
-                    policy.RequireClaim(ClaimTypes.Role, "User");
+                    policy.RequireClaim(ClaimTypes.Role, AuthorizeConstants.Roles.User);
                 });
             });
         }

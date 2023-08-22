@@ -1,5 +1,7 @@
 ﻿using MdNotes.WebApi.Features.Users.Commands;
+using MdNotesServer.Infrastructure.Security;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +9,7 @@ namespace MdNotes.WebApi.Features.Users
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = AuthorizeConstants.Policies.Administrator, Roles = AuthorizeConstants.Roles.Administrator)]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
