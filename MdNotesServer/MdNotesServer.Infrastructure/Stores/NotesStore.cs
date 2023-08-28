@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using MdNotesServer.Infrastructure.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MdNotesServer.Infrastructure.Stores
 {
@@ -6,12 +8,16 @@ namespace MdNotesServer.Infrastructure.Stores
     {
         private readonly UsersContext _usersContext;
 
-        public NotesStore(UsersContext context)
+        private readonly IMapper _mapper;
+
+        public NotesStore(UsersContext context, IMapper mapper)
         {
             _usersContext = context;
+
+            _mapper = mapper;
         }
 
-        public async Task<Guid> CreateUserNote(Guid userId, NoteEntity noteEntity)
+        public async Task<Guid> CreateUserNote(Guid userId, NoteCore note)
         {
             var user = await _usersContext.Users
                 .Where(u => u.Id == userId)
@@ -19,6 +25,8 @@ namespace MdNotesServer.Infrastructure.Stores
 
             if(user == null)
             {
+                var noteEntity = _mapper.Map<NoteEntity>(note);
+
                 user.Notes.Add(noteEntity);
 
                 _usersContext.Entry(user).State = EntityState.Modified;
@@ -33,21 +41,21 @@ namespace MdNotesServer.Infrastructure.Stores
             }
         }
 
-        public async Task<NoteEntity> UpdateUserNote(Guid noteId, NoteEntity noteEntity)
+        public async Task<NoteCore> UpdateUserNote(Guid noteId, NoteCore note)
         {
-            var note = await _usersContext.Notes
+            var noteEntity = await _usersContext.Notes
                 .Where(n => n.Id == n.Id)
                 .FirstOrDefaultAsync();
 
             if (note is not null)
             {
-                _usersContext.Notes.Update(noteEntity);
+                _usersContext.Notes.Update(_mapper.Map<NoteEntity>(note));
 
                 _usersContext.Entry(noteEntity).State = EntityState.Modified;
 
                 await _usersContext.SaveChangesAsync();
 
-                return await _usersContext.Notes.FindAsync(new object[]{ noteId });
+                return _mapper.Map<NoteCore>(await _usersContext.Notes.FindAsync(new object[]{ noteId }));
             }
             else
             {

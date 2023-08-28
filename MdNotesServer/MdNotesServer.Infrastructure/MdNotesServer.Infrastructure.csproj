@@ -18,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="MdNotesServer.Core.Models.Note">
+      <Alias>NoteCore</Alias>
+    </Using>
     <Using Include="MdNotesServer.Core.Models.User">
       <Alias>UserCore</Alias>
     </Using>
