@@ -21,6 +21,9 @@
     <Using Include="MdNotesServer.Core.Models.User">
       <Alias>UserCore</Alias>
     </Using>
+    <Using Include="MdNotesServer.Infrastructure.Entities.Note">
+      <Alias>NoteEntity</Alias>
+    </Using>
     <Using Include="MdNotesServer.Infrastructure.Entities.User">
       <Alias>UserEntity</Alias>
     </Using>
