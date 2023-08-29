@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MdNotesServer.Infrastructure.Stores
 {
-    public class NotesStore<T> : INotesStore<NoteCore>
+    public class NotesStore : INotesStore<NoteCore>
     {
         private readonly UsersContext _usersContext;
 

@@ -15,5 +15,7 @@ global using global::System.Net.Http;
 global using global::System.Net.Http.Json;
 global using global::System.Threading;
 global using global::System.Threading.Tasks;
+global using NoteCore = global::MdNotesServer.Core.Models.Note;
+global using NoteEntity = global::MdNotesServer.Infrastructure.Entities.Note;
 global using UserCore = global::MdNotesServer.Core.Models.User;
 global using UserEntity = global::MdNotesServer.Infrastructure.Entities.User;

@@ -1,9 +1,13 @@
-﻿using MdNotesServer.Infrastructure;
+﻿using MdNotes.WebApi.Middlewares;
+using MdNotesServer.Core.Stores;
+using MdNotesServer.Infrastructure;
 using MdNotesServer.Infrastructure.Entities;
 using MdNotesServer.Infrastructure.Jwt;
 using MdNotesServer.Infrastructure.Jwt.JwtConfiguration;
 using MdNotesServer.Infrastructure.MappingConfigurations;
 using MdNotesServer.Infrastructure.Security;
+using MdNotesServer.Infrastructure.Stores;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +48,8 @@ namespace MdNotes.WebApi
                 .AddEntityFrameworkStores<UsersContext>();
 
             services.AddSingleton<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
+
+            services.AddScoped<INotesStore<NoteCore>, NotesStore>();
 
             var jwtTokenOptions = _configuration.GetSection("jwtTokenOptions")
                .Get<JwtTokenOptions>()!;
@@ -129,6 +135,8 @@ namespace MdNotes.WebApi
                 context.Database.EnsureCreated();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseSwagger();
 
