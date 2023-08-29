@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using MdNotesServer.Core.Stores;
 using MdNotesServer.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace MdNotesServer.Infrastructure.Stores
 {
-    public class NotesStore<T>
+    public class NotesStore<T> : INotesStore<NoteCore>
     {
         private readonly UsersContext _usersContext;
 
@@ -80,6 +81,26 @@ namespace MdNotesServer.Infrastructure.Stores
 
             return note is null;
             
+        }
+
+        public async Task<IEnumerable<NoteCore>> GetUserNotes(Guid userId, int pageSize, int page)
+        {
+            var user = await _usersContext.Users.FindAsync(new object[] {userId});
+
+            if (user is not null)
+            {
+                var notes = _usersContext.Notes
+                    .Where(n => n.User == user)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .AsEnumerable();
+
+                return _mapper.Map<IEnumerable<NoteCore>>(notes);
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 }
