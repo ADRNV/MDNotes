@@ -118,7 +118,7 @@ namespace MdNotes.WebApi
                     policy.RequireClaim(ClaimTypes.Role, AuthorizeConstants.Roles.Administrator);
                 });
 
-                c.AddPolicy(AuthorizeConstants.Policies.Administrator, policy =>
+                c.AddPolicy(AuthorizeConstants.Policies.User, policy =>
                 {
                     policy.RequireClaim(ClaimTypes.Role, AuthorizeConstants.Roles.User);
                 });

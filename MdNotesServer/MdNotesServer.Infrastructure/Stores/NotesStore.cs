@@ -42,10 +42,11 @@ namespace MdNotesServer.Infrastructure.Stores
             }
         }
 
-        public async Task<NoteCore> UpdateUserNote(Guid noteId, NoteCore note)
+        public async Task<NoteCore> UpdateUserNote(Guid userId, Guid noteId, NoteCore note)
         {
             var noteEntity = await _usersContext.Notes
-                .Where(n => n.Id == n.Id)
+                .Include(n => n.User)
+                .Where(n => n.Id == n.Id && n.User.Id == userId)
                 .FirstOrDefaultAsync();
 
             if (note is not null)
@@ -65,10 +66,10 @@ namespace MdNotesServer.Infrastructure.Stores
             
         }
 
-        public async Task<bool> DeleteUserNote(Guid noteId)
+        public async Task<bool> DeleteUserNote(Guid userId, Guid noteId)
         {
             
-            var note = await _usersContext.Notes.FindAsync(new object[] {noteId});
+            var note = await _usersContext.Notes.FindAsync(new object[] {noteId, userId});
 
             if(note is not null)
             {
