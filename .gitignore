@@ -400,3 +400,6 @@ FodyWeavers.xsd
 *.db
 *.db-shm
 *.db-wal
+/MdNotesServer/MdNotes.WebApi/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/MdNotesServer/MdNotes.WebApi/bin/Debug/net7.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/MdNotesServer/MdNotes.WebApi/obj/MdNotes.WebApi.csproj.nuget.g.targets
