@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 
+
 namespace MdNotes.WebApi
 {
     public class Startup
@@ -30,13 +31,14 @@ namespace MdNotes.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = _configuration.GetConnectionString("UserNotes");
 
             services.AddDbContext<NotesContext>(options =>
             {
-                options.UseSqlite($@"Data Source={Environment.CurrentDirectory}\notes.db;");
+                options.UseSqlServer(connectionString);
             });
 
-            services.AddDbContext<UsersContext>(options => options.UseSqlite($@"Data Source={Environment.CurrentDirectory}\notes.db;"))
+            services.AddDbContext<UsersContext>(options => options.UseSqlServer(connectionString))
                 .AddDefaultIdentity<User>(options =>
                 {
                     options.Password.RequiredLength = 8;
