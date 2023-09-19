@@ -93,6 +93,14 @@ namespace MdNotes.WebApi
 
             services.AddControllers();
 
+            services.AddCors(c =>
+            {
+                c.AddPolicy("NotesClient", p =>
+                {
+                    p.AllowAnyOrigin();
+                });
+            });
+
             services.AddEndpointsApiExplorer();
 
             services.AddSwaggerGen(c =>
@@ -130,6 +138,8 @@ namespace MdNotes.WebApi
         public void Configure(IApplicationBuilder app)
         {
             app.UseRouting();
+
+            app.UseCors("NotesClient");
 
             using (var scope =
                        app.ApplicationServices.CreateScope())
