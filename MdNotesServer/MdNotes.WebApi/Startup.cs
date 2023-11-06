@@ -98,6 +98,8 @@ namespace MdNotes.WebApi
                 c.AddPolicy("NotesClient", p =>
                 {
                     p.AllowAnyOrigin();
+                    p.AllowAnyMethod();
+                    p.AllowAnyHeader();
                 });
             });
 
