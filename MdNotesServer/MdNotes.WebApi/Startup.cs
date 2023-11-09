@@ -8,6 +8,7 @@ using MdNotesServer.Infrastructure.MappingConfigurations;
 using MdNotesServer.Infrastructure.Security;
 using MdNotesServer.Infrastructure.Stores;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +63,10 @@ namespace MdNotes.WebApi
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddCookie("Cookies", options =>
+            {
+                options.LoginPath = "/signin";
+
             }).AddJwtBearer(options =>
               {
                   options.RequireHttpsMetadata = true;
@@ -73,15 +78,16 @@ namespace MdNotes.WebApi
                       ValidateIssuerSigningKey = true,
                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtTokenOptions.Secret)),
                       ValidAudience = jwtTokenOptions.Audience,
-                      ValidateAudience = true,
+                      ValidateAudience = false,
                       ValidateLifetime = true,
                       ClockSkew = TimeSpan.FromMinutes(60)
                   };
-            });
+              });
 
             services.AddAutoMapper(c =>
             {
                 c.AddProfile<UserEntityMappingConfiguration>();
+                c.AddProfile<NoteEntityMappingConfiguration>();
             }, Assembly.GetExecutingAssembly());
 
             services.AddScoped<IJwtAuthManager<UserEntity>, JwtAuthManager>();
@@ -97,9 +103,10 @@ namespace MdNotes.WebApi
             {
                 c.AddPolicy("NotesClient", p =>
                 {
-                    p.AllowAnyOrigin();
+                    p.WithOrigins("http://localhost:3000");
                     p.AllowAnyMethod();
                     p.AllowAnyHeader();
+                    p.AllowCredentials();
                 });
             });
 
@@ -168,6 +175,8 @@ namespace MdNotes.WebApi
                        app.ApplicationServices.CreateScope())
             using (var context = scope.ServiceProvider.GetService<UsersContext>())
                 context.Database.EnsureCreated();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
